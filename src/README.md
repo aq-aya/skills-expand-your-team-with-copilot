@@ -8,6 +8,11 @@ A super simple website application that allows students to view and sign up for 
 - Sign up for activities
 - Share activities with friends
 
+Activities can optionally have a `difficulty` field set to `Beginner`,
+`Intermediate`, or `Advanced`. Leave it out for activities suitable for all
+levels. The difficulty filter's **All** option shows only those activities;
+**Any difficulty** shows activities regardless of level.
+
 ## Sharing Activities
 
 Every activity card has a row of **Share** buttons near the bottom:

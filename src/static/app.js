@@ -1,4 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Theme controls
+  const themeToggle = document.getElementById("theme-toggle");
+  const savedTheme = localStorage.getItem("theme");
+  document.documentElement.dataset.theme =
+    savedTheme === "dark" ? "dark" : "light";
+
+  function updateThemeToggle() {
+    const isDarkMode = document.documentElement.dataset.theme === "dark";
+    themeToggle.textContent = isDarkMode ? "☀️ Light mode" : "🌙 Dark mode";
+    themeToggle.setAttribute(
+      "aria-label",
+      isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+    );
+    themeToggle.setAttribute("aria-pressed", String(isDarkMode));
+  }
+
+  updateThemeToggle();
+  themeToggle.addEventListener("click", () => {
+    const nextTheme =
+      document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = nextTheme;
+    localStorage.setItem("theme", nextTheme);
+    updateThemeToggle();
+  });
+
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
@@ -12,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("activity-search");
   const searchButton = document.getElementById("search-button");
   const categoryFilters = document.querySelectorAll(".category-filter");
+  const difficultyFilters = document.querySelectorAll(".difficulty-filter");
   const dayFilters = document.querySelectorAll(".day-filter");
   const timeFilters = document.querySelectorAll(".time-filter");
 
@@ -37,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // State for activities and filters
   let allActivities = {};
   let currentFilter = "all";
+  let currentDifficulty = "";
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
@@ -425,6 +452,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      if (
+        currentDifficulty &&
+        (currentDifficulty === "all"
+          ? details.difficulty
+          : details.difficulty !== currentDifficulty)
+      ) {
+        return;
+      }
+
       // Apply weekend filter if selected
       if (currentTimeRange === "weekend" && details.schedule_details) {
         const activityDays = details.schedule_details.days;
@@ -571,6 +607,13 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
+    if (details.difficulty) {
+      const difficulty = document.createElement("p");
+      difficulty.innerHTML = "<strong>Difficulty:</strong> ";
+      difficulty.appendChild(document.createTextNode(details.difficulty));
+      activityCard.querySelector("p").after(difficulty);
+    }
+
     // Add social sharing buttons (see share.js)
     activityCard
       .querySelector(".activity-card-actions")
@@ -616,6 +659,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update current filter and display filtered activities
       currentFilter = button.dataset.category;
+      displayFilteredActivities();
+    });
+  });
+
+  difficultyFilters.forEach((button) => {
+    button.addEventListener("click", () => {
+      difficultyFilters.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      currentDifficulty = button.dataset.difficulty;
       displayFilteredActivities();
     });
   });
