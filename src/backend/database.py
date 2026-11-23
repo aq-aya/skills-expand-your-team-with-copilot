@@ -122,8 +122,8 @@ initial_activities = {
     },
     "Manga Maniacs": {
         "description": "Dive into epic adventures, unforgettable heroes, and imaginative worlds as we explore the art and storytelling of Japanese manga together.",
-        "schedule": "Tuesdays, 7:00 PM",
-        "max_participants": 15,
+        "schedule": "Tuesdays, 5:00 PM",
+        "max_participants": 25,
         "participants": []
     },
     "Debate Team": {
