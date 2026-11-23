@@ -614,6 +614,11 @@ document.addEventListener("DOMContentLoaded", () => {
       activityCard.querySelector("p").after(difficulty);
     }
 
+    // Add social sharing buttons (see share.js)
+    activityCard
+      .querySelector(".activity-card-actions")
+      .before(createShareButtons(name, details));
+
     // Add click handlers for delete buttons
     const deleteButtons = activityCard.querySelectorAll(".delete-participant");
     deleteButtons.forEach((button) => {
